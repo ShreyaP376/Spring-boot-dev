@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,19 +12,12 @@ import com.example.demo.service.StudentService;
 public class StudentController {
 
 	@Autowired
-	StudentService schoolServiceImpl;
-	
-	@Autowired
-	StudentService collegeServiceImpl;
+	ApplicationContext factory;
 	
 	@GetMapping("fees/{type}")
 	public String getFees(@PathVariable String type) {
-		if(type.equals("school"))
-			return schoolServiceImpl.getFees();
 		
-		if(type.equals("college"))
-			return collegeServiceImpl.getFees();
-		
-		return null;
+		StudentService ss = (StudentService)factory.getBean(type);
+		return ss.getFees();
 	}
 }
