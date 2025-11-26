@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class CustomerServiceImpl implements CustomerService{
 	@Override
 	public Customer getCustomer(int cId) {
 		Customer c = cr.findById(cId).get();
+		//Optional<Customer> cust = cr.findById(cId);
 		return c;
 	}
 
@@ -49,6 +51,32 @@ public class CustomerServiceImpl implements CustomerService{
 		old.setEmail(c.getEmail());
 		cr.save(old);
 		return cId+" updated!";
+	}
+
+	@Override
+	public String updateCustSpecific(int cId, Customer c) {
+		Customer old = cr.findById(cId).get();
+		if(old == null)
+			return "Customer not found";
+		
+		if(c.getName() != null) {
+			old.setName(c.getName());
+		}
+		
+		if(c.getEmail() != null) {
+			old.setEmail(c.getEmail());
+		}
+		
+		if(c.getAddress() != null) {
+			old.setAddress(c.getAddress());
+		}
+		
+		if(c.getAge() != 0) {
+			old.setAge(c.getAge());
+		}
+		
+		cr.save(old);
+		return cId+" updated using patch method";
 	}
 
 }
